@@ -15,24 +15,45 @@ async function meetbot(meetLink, hostId) {
 		console.log('meet bot started ; ', meetLink)
 		console.log('hostId', hostId)
 
+		// true= nahi dikhega 
+		// flase = sab dikhega
 		puppeteerExtra.use(stealthPlugin())
-		const browser = await puppeteerExtra.launch({ headless: false })
+		const browser = await puppeteerExtra.launch({ headless: true  })
 
-		// const contextIncognito = await browser.createIncognitoBrowserContext();
-		// const page = await contextIncognito.newPage();
-		const page = await browser.newPage()
+		const contextIncognito = await browser.createIncognitoBrowserContext();
+		const page = await contextIncognito.newPage();
+		// const page = await browser.newPage()
+
 
 		// Login to google
 
 		await page.goto('https://accounts.google.com/signin/v2/identifier')
+
+		await page.screenshot({ path: 'ss/1.png' });
+		// var h1 = httpResponse.headers();
+		// console.log(h1);
+		
+
 		await page.type('[type="email"]', process.env.gmailUsername)
+
+		await page.screenshot({ path: 'ss/2.png' });
+
 		await page.click('#identifierNext')
 		await page.waitForTimeout(5000)
 
+		await page.screenshot({ path: 'ss/3.png' });
+
+
 		await page.type('[type="password"]', process.env.password)
+
+		await page.screenshot({ path: 'ss/4.png' });
+
 		await page.click('#passwordNext')
 
-		await page.waitForTimeout(3000)
+		await page.waitForTimeout(5000)
+
+		await page.screenshot({ path: 'ss/5.png' });
+
 
 		const context = browser.defaultBrowserContext()
 		context.overridePermissions(meetLink, [
@@ -60,6 +81,8 @@ async function meetbot(meetLink, hostId) {
 		await page.keyboard.up('Control')
 
 		// ask to join
+
+
 
 		await page.evaluate(() => {
 			document
